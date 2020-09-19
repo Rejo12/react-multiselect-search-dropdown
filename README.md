@@ -1,8 +1,10 @@
 # react-multiselect-search-dropdown
 
 react-multiselect-search-dropdown is a react component which provides you the ability to select multiple values from the list along with a search option.
-
-![React Multiselect](src/multi.gif)
+<p align="center">
+<img src="https://github.com/Rejo12/react-multiselect-search-dropdown/blob/master/src/multi.gif"  
+alt="React Multiselect"/>
+</p>
 
 ## Installation
 
@@ -25,7 +27,7 @@ import MultiSelectDropDown from 'react-multiselect-search-dropdown';
      <MultiSelectDropDown
       id="dropdown1"                                            // pass a unique id for each multiselectdropdown
       options={valuesArr}                                       //an array with {id,value to be displayed,'selected':'false'}
-      getSelectedValues={this.getValues.bind(this)}/>           //function that will give back all the selected values 
+      getSelectedValues={this.getValues.bind(this)}/>           //function that will give back all the selected values
 ```
 
 
