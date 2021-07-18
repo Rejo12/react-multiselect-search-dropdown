@@ -8,6 +8,30 @@ function MultiSelectDropDown(props){
 const [click,setClick]=useState(null);
 const [selectedValues,setSelectedValues]=useState([]);
 const [propArray,setPropArray] = useState(props.options);
+const [tooltipText,setToolTipText]=useState([]);
+
+useEffect(() => {
+  let selectArr=[];
+  // props.options.map((item)=>{
+  //   if(item.selected == true){
+  //     console.log("item",item);
+  //     let obj = {};
+  //       obj = item;
+  //       selectArr.push(obj);
+  //   }
+  // })
+
+  selectArr = props.options.filter((item)=>{
+   return item.selected === true;
+  })
+  var selectToolTip = selectArr.map((item)=>{
+    return item.options;
+  })
+  setSelectedValues(selectArr);
+  setToolTipText(selectToolTip);
+  setClick('unclicked');
+
+},[]);
 
 
 useEffect(() => {
@@ -31,11 +55,13 @@ let handleClick = () =>{
 }
 let handleCheck = (id,event) =>{
   var newArr = selectedValues;
+  var tmpTooltipText=tooltipText;
   if(event.target.checked === true){
   var modifiedArray =  props.options.map((item)=>{
       if(item.id === id){
         var obj = {};
         obj = item;
+        tmpTooltipText.push(item.options)
         newArr.push(obj);
         item.selected=true;
         return item;
@@ -47,8 +73,12 @@ let handleCheck = (id,event) =>{
   }
   else {
     var idIndex = newArr.map((o)=>{return o.id}).indexOf(id);
+    var toolTipEleIndex=tmpTooltipText.map((item)=>{return item}).indexOf(newArr[idIndex].options);
     if(idIndex > -1){
       newArr.splice(idIndex,1);
+    }
+    if(toolTipEleIndex > -1){
+      tmpTooltipText.splice(toolTipEleIndex,1);
     }
     var modifiedArray =  props.options.map((item)=>{
         if(item.id === id){
@@ -61,7 +91,8 @@ let handleCheck = (id,event) =>{
       })
   }
   setSelectedValues(newArr);
-  setPropArray(modifiedArray)
+  setPropArray(modifiedArray);
+  setToolTipText(tmpTooltipText);
   props.getSelectedValues(selectedValues);
 }
 
@@ -94,7 +125,7 @@ let handleChange=(e)=>{
 // console.log("render",selectedValues);
 
 return(
-  <div tabIndex="100" onBlur={handleBlur} >
+  <div tabIndex="100" onBlur={handleBlur} className="tooltipForMultiselect">
   <div  className="dropdown valueDisplay" tabIndex="0" onClick={handleClick} onMouseDown={handleMouse}>
     {(click === 'unclicked') &&
     selectedValues.length+ ' values selected'
@@ -102,6 +133,14 @@ return(
     }
 
   </div>
+  <span className="tooltiptext">
+   {(selectedValues.length > 0)&&
+    tooltipText.map((item)=>
+    item +" , "
+    )
+
+   }
+    </span>
   <div id={props.id} className="dropdown-content hide" onClick={handleMouse} >
   {(click === 'clicked') &&
   <>
@@ -114,10 +153,13 @@ return(
   }
   {(click === 'clicked') &&
   propArray.map((item)=>
-  <div onClick={handleMouse} key={item.id}  >
+  <div onClick={handleMouse} key={item.id} className="ddContent" >
   <input type="checkbox" id={item.id} className="cursor" onChange={(event)=>handleCheck(item.id,event)}
          checked={item.selected} />&nbsp;&nbsp;&nbsp;&nbsp;
   <label>{item.options}</label>
+  {(item.secondaryValue != undefined && item.secondaryValue != "")&&
+    <label>{item.secondaryValue}</label>
+  }
   <br/>
   </div>
 )

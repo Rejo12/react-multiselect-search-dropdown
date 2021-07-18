@@ -46,6 +46,31 @@ function MultiSelectDropDown(props) {
       propArray = _useState6[0],
       setPropArray = _useState6[1];
 
+  var _useState7 = (0, _react.useState)([]),
+      _useState8 = _slicedToArray(_useState7, 2),
+      tooltipText = _useState8[0],
+      setToolTipText = _useState8[1];
+
+  (0, _react.useEffect)(function () {
+    var selectArr = []; // props.options.map((item)=>{
+    //   if(item.selected == true){
+    //     console.log("item",item);
+    //     let obj = {};
+    //       obj = item;
+    //       selectArr.push(obj);
+    //   }
+    // })
+
+    selectArr = props.options.filter(function (item) {
+      return item.selected === true;
+    });
+    var selectToolTip = selectArr.map(function (item) {
+      return item.options;
+    });
+    setSelectedValues(selectArr);
+    setToolTipText(selectToolTip);
+    setClick('unclicked');
+  }, []);
   (0, _react.useEffect)(function () {
     window.addEventListener('click', blurMethod);
   }, [selectedValues]);
@@ -67,12 +92,14 @@ function MultiSelectDropDown(props) {
 
   var handleCheck = function handleCheck(id, event) {
     var newArr = selectedValues;
+    var tmpTooltipText = tooltipText;
 
     if (event.target.checked === true) {
       var modifiedArray = props.options.map(function (item) {
         if (item.id === id) {
           var obj = {};
           obj = item;
+          tmpTooltipText.push(item.options);
           newArr.push(obj);
           item.selected = true;
           return item;
@@ -84,9 +111,16 @@ function MultiSelectDropDown(props) {
       var idIndex = newArr.map(function (o) {
         return o.id;
       }).indexOf(id);
+      var toolTipEleIndex = tmpTooltipText.map(function (item) {
+        return item;
+      }).indexOf(newArr[idIndex].options);
 
       if (idIndex > -1) {
         newArr.splice(idIndex, 1);
+      }
+
+      if (toolTipEleIndex > -1) {
+        tmpTooltipText.splice(toolTipEleIndex, 1);
       }
 
       var modifiedArray = props.options.map(function (item) {
@@ -101,6 +135,7 @@ function MultiSelectDropDown(props) {
 
     setSelectedValues(newArr);
     setPropArray(modifiedArray);
+    setToolTipText(tmpTooltipText);
     props.getSelectedValues(selectedValues);
   };
 
@@ -134,13 +169,18 @@ function MultiSelectDropDown(props) {
 
   return /*#__PURE__*/_react.default.createElement("div", {
     tabIndex: "100",
-    onBlur: handleBlur
+    onBlur: handleBlur,
+    className: "tooltipForMultiselect"
   }, /*#__PURE__*/_react.default.createElement("div", {
     className: "dropdown valueDisplay",
     tabIndex: "0",
     onClick: handleClick,
     onMouseDown: handleMouse
-  }, click === 'unclicked' && selectedValues.length + ' values selected'), /*#__PURE__*/_react.default.createElement("div", {
+  }, click === 'unclicked' && selectedValues.length + ' values selected'), /*#__PURE__*/_react.default.createElement("span", {
+    className: "tooltiptext"
+  }, selectedValues.length > 0 && tooltipText.map(function (item) {
+    return item + " , ";
+  })), /*#__PURE__*/_react.default.createElement("div", {
     id: props.id,
     className: "dropdown-content hide",
     onClick: handleMouse
@@ -155,7 +195,8 @@ function MultiSelectDropDown(props) {
   })), /*#__PURE__*/_react.default.createElement("br", null)), click === 'clicked' && propArray.map(function (item) {
     return /*#__PURE__*/_react.default.createElement("div", {
       onClick: handleMouse,
-      key: item.id
+      key: item.id,
+      className: "ddContent"
     }, /*#__PURE__*/_react.default.createElement("input", {
       type: "checkbox",
       id: item.id,
@@ -164,7 +205,7 @@ function MultiSelectDropDown(props) {
         return handleCheck(item.id, event);
       },
       checked: item.selected
-    }), "\xA0\xA0\xA0\xA0", /*#__PURE__*/_react.default.createElement("label", null, item.options), /*#__PURE__*/_react.default.createElement("br", null));
+    }), "\xA0\xA0\xA0\xA0", /*#__PURE__*/_react.default.createElement("label", null, item.options), item.secondaryValue != undefined && item.secondaryValue != "" && /*#__PURE__*/_react.default.createElement("label", null, item.secondaryValue), /*#__PURE__*/_react.default.createElement("br", null));
   })));
 }
 

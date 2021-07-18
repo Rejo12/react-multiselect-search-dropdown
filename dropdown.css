@@ -1,32 +1,74 @@
 .dropdown {
-    position: relative;
-    /* display: inline-block; */
-  }
-  
-  .dropdown-content {
-      display:none;
-    max-height: 330px;
-    overflow-y: auto;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    padding: 12px 16px;
-    z-index: 1;
-  }
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  .valueDisplay{
-    border: inset;
-    min-height: 22px;
-    background-color: aliceblue;
-    overflow-y: auto;
-    cursor: pointer;
-  }
-  
-  .cursor{
-    cursor: pointer;
-  }
+  position: relative;
+  /* display: inline-block; */
+}
+
+.dropdown-content {
+    display:none;
+  max-height: 330px;
+  overflow-y: auto;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.valueDisplay{
+  border: inset;
+  min-height: 22px;
+  background-color: aliceblue;
+  overflow-y: auto;
+  cursor: pointer;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+.tooltipForMultiselect {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltipForMultiselect .tooltiptext {
+  visibility: hidden;
+  width: 100%;
+  background-color: #FBEAEB;;
+  color: #2F3C7E;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+  word-break: break-word;
+
+  /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+.tooltipForMultiselect:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+.ddContent{
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-around; */
+  align-items: baseline;
+}
+
+.ddContent > label{
+min-width: 100px;
+max-width:150px;
+}
